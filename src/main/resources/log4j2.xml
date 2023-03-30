@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d %p %c{1.} %m[%t]%n</Property>
+        <Property name="APP_LOG_ROOT">H:\j files\ru.homework\src\main\Logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingFile name="traceLog" fileName="${APP_LOG_ROOT}/parsingTrace.log"
+                     filePattern="${APP_LOG_ROOT}/parsingTrace-%d{yyyy-MM-dd}-%i.log">
+            <LevelRangeFilter minLevel="TRACE" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+        <RollingFile name="errorLog" fileName="${APP_LOG_ROOT}/parsing_errors.log"
+                     filePattern="${APP_LOG_ROOT}/parsing_errors-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name ="parsing" additivity="false">
+            <AppenderRef ref="errorLog"/>
+            <AppenderRef ref="traceLog"/>
+
+        <!--<Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="errorLog"/>
+            <AppenderRef ref="quiresLog"/>
+
+        </Root>-->
+        </Logger>
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
